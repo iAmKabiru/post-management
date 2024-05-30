@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addPost } from "../api/posts";
 import { PostFormData } from "../formSchemas/postFormSchema";
-import AddPostDialog from "./addPostDialog";
+import PostForm from "./PostForm";
 
 
 const AddPost = () => {
@@ -14,17 +14,19 @@ const AddPost = () => {
           queryClient.invalidateQueries({ queryKey: ['posts'] });
         }
       })
-      
-      const handleAddPost = (data: PostFormData) => {
-        addPostMutation(data);
+
+      const handleAddPost = async (data: PostFormData) => {
+        try {
+          const response = await addPostMutation(data);
+          return response;
+        } catch (error) {
+          throw error;
+        }
       };
 
       return (
         <> 
-        <AddPostDialog 
-        onSubmit={handleAddPost} 
-        title="Add New Post"
-        />
+          <PostForm onSubmit={handleAddPost} title="Add New Post" />
         </>
       )
 }   

@@ -1,8 +1,9 @@
 import React from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { fetchPosts, Post } from '../api/posts';
 import AddPost from '../components/AddPost';
+import Header from '../components/Header';
 
 const PostListPage: React.FC = () => {
 
@@ -13,7 +14,7 @@ const PostListPage: React.FC = () => {
 
   return (
     <div>
-      <div className='header h-16 bg-green-500 shadow text-white text-lg font-extrabold px-5 flex items-center'>Post Management</div>
+      <Header />
       <div className="mt-5 px-16">
         <div className='flex justify-end'>
           <AddPost />

@@ -1,35 +1,38 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePost } from "../api/posts";
 import { PostFormData } from "../formSchemas/postFormSchema";
-import AddPostDialog from "./addPostDialog";
+import PostForm from "./PostForm";
 
 interface UpdatePostProps {
-  id: number;
+  id: number,
+  post: PostFormData
 }
 
-const UpdatePost: React.FC<UpdatePostProps> = ({id}) => {
+const UpdatePost: React.FC<UpdatePostProps> = ({id, post}) => {
 
     const queryClient = useQueryClient();
 
     const {mutateAsync: updatePostMutation} = useMutation({
         mutationFn: updatePost,
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['post', id] });
+          queryClient.invalidateQueries({ queryKey: ['post'] });
         }
       })
       
-      const handleUpdatePost = (data: PostFormData) => {
-        const dataWIthId = {"id": id, ...data}
-        updatePostMutation(dataWIthId);
-      };
+
+      const handleUpdatePost = async (data: PostFormData) => {
+        try {
+          const dataWIthId = {"id": id, ...data}
+          const response = await updatePostMutation(dataWIthId)
+          return response;
+        } catch (error) {
+          throw error;
+        }
+      }
 
       return (
         <> 
-        <AddPostDialog 
-        onSubmit={handleUpdatePost} 
-        title="Update Post"
-        />
-        
+        <PostForm onSubmit={handleUpdatePost} title="Update Post"  post={post}/>
         </>
       )
 }   
