@@ -44,13 +44,12 @@ const PostDetailPage: React.FC = () => {
         <h2 className="text-xl font-bold mt-6 mb-4">Comments</h2>
         <AddCommentComponent post_id={Number(post_id)} />
 
-
         <div className='commeny-list mt-5'>
           {comments?.map(comment => (
             <div key={comment.id}>
               <div className='card border p-5 mb-3'>
                 <p className='mt-2'>{comment.content}</p>
-                <UpdateComment id={comment.id} content={comment.content} />
+                {comment && <UpdateComment id={Number(comment.id)} post_id={Number(post_id)} content={comment.content} /> }
               </div>
             </div>
           ))}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export interface Comment {
-  id: number;
+  id?: number;
   postId: number;
   content: string;
 }
@@ -11,13 +11,14 @@ export const fetchComments = async (postId: number): Promise<Comment[]> => {
   return response.data;
 };
 
-export const addComment = async (comment: Omit<Comment, 'id'>): Promise<Comment> => {
-
-  const response = await axios.post(`http://localhost:4000/comments`, comment);
+export const addComment = async (comment: Comment): Promise<Comment> => {
+  const { postId: _, ...commentWithoutPostId } = comment;
+  const response = await axios.post(`http://localhost:4000/comments`, commentWithoutPostId);
   return response.data;
 };
 
 export const updateComment = async (comment: Comment): Promise<Comment> => {
-  const response = await axios.put(`http://localhost:4000/comments/${comment.id}`, comment);
+  const { postId: _, ...commentWithoutPostId } = comment;
+  const response = await axios.patch(`http://localhost:4000/comments/${commentWithoutPostId.id}`, commentWithoutPostId);
   return response.data;
 };

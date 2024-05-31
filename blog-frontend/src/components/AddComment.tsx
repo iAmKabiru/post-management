@@ -15,7 +15,7 @@ const AddCommentComponent: React.FC<AddCommentProps> = ({ post_id }) => {
   const { mutateAsync: addCommentMutation } = useMutation({
     mutationFn: addComment,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', post_id] });
+      queryClient.invalidateQueries({ queryKey: ['comments'] });
       setIsLoading(false);
     },
     onError: () => {
@@ -24,13 +24,14 @@ const AddCommentComponent: React.FC<AddCommentProps> = ({ post_id }) => {
   });
 
   const handleAddComment = async (data: CommentFormData) => {
-    await addCommentMutation({ postId: post_id, content: data.content });
+    const dataWIthPostId = {"postId": post_id, ...data}
+    await addCommentMutation(dataWIthPostId);
   };
 
   return (
     <div>
       <h3 className="text-lg font-bold mt-4">Add a Comment</h3>
-      <CommentForm onSubmit={handleAddComment} isLoading={isLoading} />
+      <CommentForm onSubmit={handleAddComment} />
     </div>
   );
 };
